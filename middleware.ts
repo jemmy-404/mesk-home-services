@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isAdminPage = pathname.startsWith('/admin') && pathname !== '/admin/login';
-  const isAdminApi = pathname.startsWith('/api/admin');
+  const isAdminApi = pathname.startsWith('/api/admin') && !pathname.startsWith('/api/admin/auth');
   const isLoginPage = pathname === '/admin/login';
 
   const token = request.cookies.get(COOKIE_NAME)?.value;

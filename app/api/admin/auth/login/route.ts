@@ -7,26 +7,29 @@ export async function POST(request: NextRequest) {
   try {
     const { username, password } = await request.json();
 
-    if (!username || !password) {
+    const cleanUser = typeof username === 'string' ? username.trim() : '';
+    const cleanPass = typeof password === 'string' ? password.trim() : '';
+
+    if (!cleanUser || !cleanPass) {
       return NextResponse.json({ error: 'يرجى إدخال اسم المستخدم وكلمة المرور' }, { status: 400 });
     }
 
-    const envUser = process.env.ADMIN_USERNAME || 'admin';
-    const envPass = process.env.ADMIN_PASSWORD || 'MeskAdmin2025!#';
+    const envUser = (process.env.ADMIN_USERNAME || 'admin').trim();
+    const envPass = (process.env.ADMIN_PASSWORD || 'MeskAdmin2025!#').trim();
 
     let isValid = false;
 
     // Check .env direct match first
-    if (username === envUser && password === envPass) {
+    if (cleanUser.toLowerCase() === envUser.toLowerCase() && cleanPass === envPass) {
       isValid = true;
     } else {
       // Check database AdminUser
       try {
         const user = await prisma.adminUser.findUnique({
-          where: { username },
+          where: { username: cleanUser },
         });
         if (user && user.passwordHash) {
-          const match = await bcrypt.compare(password, user.passwordHash);
+          const match = await bcrypt.compare(cleanPass, user.passwordHash);
           if (match) isValid = true;
         }
       } catch (err) {
@@ -39,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     const token = await signAdminToken({
-      username,
+      username: cleanUser,
       role: 'admin',
     });
 

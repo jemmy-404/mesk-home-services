@@ -32,8 +32,7 @@ function LoginForm() {
         throw new Error(data.error || 'فشل تسجيل الدخول');
       }
 
-      router.push(redirectPath);
-      router.refresh();
+      window.location.href = redirectPath;
     } catch (err) {
       setErrorMsg((err as Error).message);
     } finally {
