@@ -33,7 +33,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        cairo: ['var(--font-cairo)', 'Cairo', 'sans-serif'],
+        cairo: ['Cairo', 'sans-serif'],
       },
       animation: {
         'pulse-fast': 'pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',

@@ -1,13 +1,5 @@
 import type { Metadata } from 'next';
-import { Cairo } from 'next/font/google';
 import './globals.css';
-
-const cairo = Cairo({
-  subsets: ['arabic', 'latin'],
-  weight: ['400', '600', '700', '800'],
-  variable: '--font-cairo',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://meskco.com'),
@@ -67,7 +59,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={cairo.variable}>
+    <html lang="ar" dir="rtl">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-screen flex flex-col font-cairo bg-white text-brand-navy antialiased selection:bg-brand-blue/20 selection:text-brand-navy">
         {children}
       </body>
