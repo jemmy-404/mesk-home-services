@@ -1,0 +1,114 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model GlobalSettings {
+  id                      Int      @id @default(1)
+  defaultPhone            String   @default("0571319638")
+  defaultWhatsapp         String   @default("966571319638")
+  metaPixelId             String?
+  tiktokPixelId           String?
+  snapchatPixelId         String?
+  googleAdsId             String?
+  gtmId                   String?
+  
+  // Lead Routing Toggles & Credentials
+  enableTelegram          Boolean  @default(false)
+  telegramBotToken        String?
+  telegramChatId          String?
+  
+  enableWhatsappRedirect  Boolean  @default(true)
+  enableWhatsappWebhook   Boolean  @default(false)
+  whatsappWebhookUrl      String?
+  
+  enableGoogleSheet       Boolean  @default(false)
+  googleSheetWebhookUrl   String?
+  
+  enableEmail             Boolean  @default(false)
+  notificationEmail       String?
+  
+  // GBP / SEO fields
+  businessAddress         String?
+  googleMapsEmbedUrl      String?
+  googleBusinessProfileUrl String?
+  workingHours            String?  @default("على مدار 24 ساعة طوال أيام الأسبوع")
+  
+  updatedAt               DateTime @updatedAt
+}
+
+model Service {
+  id              Int      @id @default(autoincrement())
+  slug            String   @unique
+  nameAr          String
+  shortDesc       String
+  fullContent     String
+  iconName        String   @default("Sparkles")
+  featuresJson    String
+  faqsJson        String
+  metaTitle       String?
+  metaDescription String?
+  isActive        Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  nameAr    String
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PageOverride {
+  id                      Int      @id @default(autoincrement())
+  routePath               String   @unique
+  label                   String
+  overridePhone           String?
+  overrideWhatsapp        String?
+  overrideMetaPixelId     String?
+  overrideTiktokPixelId   String?
+  overrideSnapchatPixelId String?
+  overrideGoogleAdsId     String?
+  overrideGtmId           String?
+  overrideTelegramChatId  String?
+  overrideGoogleSheetUrl  String?
+  customHeadline          String?
+  customOfferBadge        String?
+  isActive                Boolean  @default(true)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model Lead {
+  id              Int      @id @default(autoincrement())
+  name            String
+  phone           String
+  serviceName     String
+  cityName        String
+  sourcePath      String   @default("/")
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  status          String   @default("NEW")
+  routingLogsJson String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
