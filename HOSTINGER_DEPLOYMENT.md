@@ -4,7 +4,21 @@
 
 ---
 
-## 1. إعداد قاعدة بيانات MySQL على Hostinger
+## 1. ربط مستودع GitHub على Hostinger (Git / Hostinger Connector)
+تم رفع وتحديث المشروع بالكامل على مستودع GitHub الخاص بك:
+🔗 **رابط المستودع:** `https://github.com/jemmy-404/mesk-home-services`
+- **الفرع (Branch):** `main`
+
+في لوحة تحكم **Hostinger (hPanel)**:
+1. توجه إلى **Advanced** -> **Git**.
+2. أدخل رابط المستودع: `https://github.com/jemmy-404/mesk-home-services.git`
+3. اختر الفرع: `main`
+4. حدد مسار النشر (Install Path): المجلد المخصص لموقعك (مثل `public_html`).
+5. فعّل خيار **Auto Deployment** ليتم التحديث تلقائياً مع كل تحديث ترسله لمستودع GitHub.
+
+---
+
+## 2. إعداد قاعدة بيانات MySQL على Hostinger
 1. افتح لوحة تحكم Hostinger (**hPanel**).
 2. توجه إلى **Databases** (قواعد البيانات) -> **Management**.
 3. قم بإنشاء قاعدة بيانات MySQL جديدة:
