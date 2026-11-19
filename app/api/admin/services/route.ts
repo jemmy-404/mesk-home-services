@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { INITIAL_SERVICES } from '@/lib/initial-data';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,11 +9,29 @@ export async function GET() {
     const services = await prisma.service.findMany({
       orderBy: { sortOrder: 'asc' },
     });
-    return NextResponse.json({ services });
+    if (services && services.length > 0) {
+      return NextResponse.json({ services });
+    }
   } catch (err) {
     console.error('[Admin Services GET] Error:', err);
-    return NextResponse.json({ error: 'فشل جلب الخدمات', services: [] }, { status: 500 });
   }
+
+  // Graceful fallback to initial default services
+  const fallbackServices = INITIAL_SERVICES.map((s, index) => ({
+    id: index + 1,
+    slug: s.slug,
+    nameAr: s.nameAr,
+    shortDesc: s.shortDesc,
+    fullContent: s.fullContent,
+    iconName: s.iconName,
+    featuresJson: JSON.stringify(s.features),
+    faqsJson: JSON.stringify(s.faqs),
+    metaTitle: s.metaTitle,
+    metaDescription: s.metaDescription,
+    sortOrder: s.sortOrder,
+    isActive: true,
+  }));
+  return NextResponse.json({ services: fallbackServices });
 }
 
 export async function POST(request: NextRequest) {

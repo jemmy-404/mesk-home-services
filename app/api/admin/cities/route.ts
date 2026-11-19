@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma, getActiveCities } from '@/lib/prisma';
+import { INITIAL_CITIES } from '@/lib/initial-data';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,11 +9,22 @@ export async function GET() {
     const cities = await prisma.city.findMany({
       orderBy: { sortOrder: 'asc' },
     });
-    return NextResponse.json({ cities });
+    if (cities && cities.length > 0) {
+      return NextResponse.json({ cities });
+    }
   } catch (err) {
     console.error('[Admin Cities GET] Error:', err);
-    return NextResponse.json({ error: 'فشل جلب المدن', cities: [] }, { status: 500 });
   }
+
+  // Graceful fallback to initial default cities
+  const fallbackCities = INITIAL_CITIES.map((c, index) => ({
+    id: index + 1,
+    slug: c.slug,
+    nameAr: c.nameAr,
+    isActive: true,
+    sortOrder: c.sortOrder,
+  }));
+  return NextResponse.json({ cities: fallbackCities });
 }
 
 export async function POST(request: NextRequest) {
